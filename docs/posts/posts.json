@@ -1,5 +1,20 @@
 [
   {
+    "path": "posts/2019-12-01-leyendo-lecturas/",
+    "title": "Leyendo lecturas",
+    "description": "Leyendo los datos de EDP en R.",
+    "author": [
+      {
+        "name": "Juan Riera",
+        "url": "https://www.linkedin.com/in/juanriera/"
+      }
+    ],
+    "date": "2019-12-01",
+    "categories": [],
+    "preview": "posts/2019-12-01-leyendo-lecturas/leyendo-lecturas_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2019-12-01T14:23:43+01:00"
+  },
+  {
     "path": "posts/welcome/",
     "title": "Welcome to Blog",
     "description": "Welcome to our new blog, Blog. We hope you enjoy \nreading what we have to say!",
