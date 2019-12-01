@@ -1,5 +1,5 @@
 ---
-title: "Nuevo"
+title: "Post de bienvenida"
 description: |
   Artículo usando Distill.
 author:
@@ -13,9 +13,13 @@ output: distill::distill_article
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web. 
+Te doy la bienvenida a este blog experimental sobre R.
 
-Learn more about using Distill for R Markdown at <https://rstudio.github.io/distill>.
+El blog está desarrollado sobre Distill.
+
+Distill es un formato de publicacióin para escritura científica y técnica, en formato web nativo.
+
+Puedes aprender más sobre uso de Distill para Rmarkdown en <https://rstudio.github.io/distill>.
 
 ```
 
