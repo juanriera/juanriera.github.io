@@ -29,7 +29,7 @@ De esta factura, lo que me interesa especialmente es recuperar los datos de cons
 
 
 ```{r, echo=FALSE, out.width = "100%"}
-knitr::include_graphics('IMG_4184_detalle.JPG')
+knitr::include_graphics('IMG_4184_detalle.jpeg')
 ```
 
 Para ello, he tenido que configurar mi cuenta de EDP, mi proveedor energético, para descargar mis lecturas de contador en formato CSV. Esto quiere decir que ya no tendré una copia en papel de la factura, pero a cambio dispongo de los datos.
