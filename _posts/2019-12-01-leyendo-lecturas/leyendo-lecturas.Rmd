@@ -85,9 +85,9 @@ kable(head(df))
 
 Ahora ya sólo queda calcular los consumos, como diferencia de dos lecturas sucesivas. La serie está ordenada de más antigua a más reciente, por lo que hay que hacer dos correcciones: 
 
-* cambiar de signo la diferencia calculada, para que sea la más reciente menos la más antigua
+* Cambiar de signo la diferencia calculada, ya que al restar el valor más antiguo (lectura anterior, valor más bajo) menos el más reciente (lectura actual, valor más alto), la diferencia es negativa, hay que cambiar el signo para obtener el valor diferencial de consumo en positivo
 
-* añadir como primer término un valor *NA* ya que la serie diferenciada tiene un término menos, y el primero en realidad no existe (el primer término de la serie diferenciada es la diferencia entre el segundo y el primero, por lo que no hay un primero)
+* Añadir a la serie un primer valor *NA* ya que la serie diferenciada tiene un término menos; el primer valor de la serie diferenciada es la diferencia entre el segundo y el primero, que se corresponde con el valor de consumo del *segundo* periodo). 
 
 ```{r , include=TRUE, echo = TRUE}
 df <- df %>% 
@@ -112,8 +112,8 @@ Bien, finalmente he conseguido mi gáfica de consumos. Hay una pequeña diferenc
 
 Quedan algunas cuestiones para resolver:
 
-+ Ver si es posible disponer de lecturas más frecuentes, diarias o incluso horarias
++ Consultar a EDP si es posible disponer de lecturas más frecuentes, diarias o incluso horarias.
 
-+ Pasar las lecturas a valor en euros
++ Hacer el cálculo económico del valor en kWh.
 
 Esto será para otro día.

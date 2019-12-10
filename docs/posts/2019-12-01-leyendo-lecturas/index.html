@@ -1529,8 +1529,8 @@ kable(head(df))</code></pre>
 </div>
 <p>Ahora ya sólo queda calcular los consumos, como diferencia de dos lecturas sucesivas. La serie está ordenada de más antigua a más reciente, por lo que hay que hacer dos correcciones:</p>
 <ul>
-<li><p>cambiar de signo la diferencia calculada, para que sea la más reciente menos la más antigua</p></li>
-<li><p>añadir como primer término un valor <em>NA</em> ya que la serie diferenciada tiene un término menos, y el primero en realidad no existe (el primer término de la serie diferenciada es la diferencia entre el segundo y el primero, por lo que no hay un primero)</p></li>
+<li><p>Cambiar de signo la diferencia calculada, ya que al restar el valor más antiguo (lectura anterior, valor más bajo) menos el más reciente (lectura actual, valor más alto), la diferencia es negativa, hay que cambiar el signo para obtener el valor diferencial de consumo en positivo</p></li>
+<li><p>Añadir a la serie un primer valor <em>NA</em> ya que la serie diferenciada tiene un término menos; el primer valor de la serie diferenciada es la diferencia entre el segundo y el primero, que se corresponde con el valor de consumo del <em>segundo</em> periodo).</p></li>
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
@@ -1553,8 +1553,8 @@ ggplot(df, aes(x = fecha, y = consumo_kWh)) +
 <p>Bien, finalmente he conseguido mi gáfica de consumos. Hay una pequeña diferencia respecto a la que me envió EDP debido a que EDP ha sumado en enero dos lecturas realizadas en enero, la última quincena del año 2018 y el propio mes de enero 2019.</p>
 <p>Quedan algunas cuestiones para resolver:</p>
 <ul>
-<li><p>Ver si es posible disponer de lecturas más frecuentes, diarias o incluso horarias</p></li>
-<li><p>Pasar las lecturas a valor en euros</p></li>
+<li><p>Consultar a EDP si es posible disponer de lecturas más frecuentes, diarias o incluso horarias.</p></li>
+<li><p>Hacer el cálculo económico del valor en kWh.</p></li>
 </ul>
 <p>Esto será para otro día.</p>
 <!--radix_placeholder_article_footer-->
