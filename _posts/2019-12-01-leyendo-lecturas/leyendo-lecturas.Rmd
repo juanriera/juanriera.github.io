@@ -32,7 +32,7 @@ De esta factura, lo que me interesa especialmente es recuperar los datos de cons
 knitr::include_graphics('IMG_4184_detalle.JPG')
 ```
 
-Para ello, necesité configurar mi cuenta de EDP, mi proveedor energético, para descargar mis lecturas de contador en formato CSV. Esto quiere decir que ya no tendré una copia en papel de la factura, pero a cambio dispongo de los datos.
+Para ello, he tenido que configurar mi cuenta de EDP, mi proveedor energético, para descargar mis lecturas de contador en formato CSV. Esto quiere decir que ya no tendré una copia en papel de la factura, pero a cambio dispongo de los datos.
 
 Como siempre, cargo las librerías al principio, de forma que de un vistazo se pueda saber qué funciones estoy utilizando. Desde la aparición de las bibliotecas *tidy*, intento estandarizar todos los procesos a *tidyverse*
 
