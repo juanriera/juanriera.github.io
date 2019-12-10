@@ -49,7 +49,7 @@
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["2019-11 lecturas.csv","leyendo-lecturas_files/bowser-1.9.3/bowser.min.js","leyendo-lecturas_files/distill-2.2.21/template.v2.js","leyendo-lecturas_files/figure-html5/unnamed-chunk-1-1.png","leyendo-lecturas_files/jquery-1.11.3/jquery.min.js","leyendo-lecturas_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["2019-11 lecturas.csv","IMG_4184.JPG","IMG_4184_detalle.jpg","leyendo-lecturas_files/bowser-1.9.3/bowser.min.js","leyendo-lecturas_files/distill-2.2.21/template.v2.js","leyendo-lecturas_files/figure-html5/unnamed-chunk-1-1.png","leyendo-lecturas_files/figure-html5/unnamed-chunk-10-1.png","leyendo-lecturas_files/figure-html5/unnamed-chunk-2-1.png","leyendo-lecturas_files/figure-html5/unnamed-chunk-3-1.png","leyendo-lecturas_files/figure-html5/unnamed-chunk-5-1.png","leyendo-lecturas_files/figure-html5/unnamed-chunk-9-1.png","leyendo-lecturas_files/jquery-1.11.3/jquery.min.js","leyendo-lecturas_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -963,37 +963,250 @@
 </div>
 
 <div class="d-article">
+<p>Durante los últimos años, he estado utilizando R para analizar los datos de producción de varias fábricas de queso, y ayudando a los equipos a utilizar esta herramienta. Este mes de noviembre me he jubilado, y he vuelto a Asturias. Una de las cosas que me han pasado por la cabeza estos días es si R también podría aportarme algo en el análisis de mi economía familiar.</p>
+<p>Mi primer ensayo casero con R ha sido el análisis de la factura eléctrica. EDP envía una factura muy detallada, como hacen actualmente casi todos los proveedores. Esta es mi factura de noviembre:</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="IMG_4184.JPG" width="60%" /></p>
+</div>
+<p>De esta factura, lo que me interesa especialmente es recuperar los datos de consumo, de forma que pueda reproducir la gráfica que me proporciona EDP en mi factura:</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="IMG_4184_detalle.JPG" width="100%" /></p>
+</div>
+<p>Para ello, necesité configurar mi cuenta de EDP, mi proveedor energético, para descargar mis lecturas de contador en formato CSV. Esto quiere decir que ya no tendré una copia en papel de la factura, pero a cambio dispongo de los datos.</p>
+<p>Como siempre, cargo las librerías al principio, de forma que de un vistazo se pueda saber qué funciones estoy utilizando. Desde la aparición de las bibliotecas <em>tidy</em>, intento estandarizar todos los procesos a <em>tidyverse</em></p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
+library(knitr)
 library (tidyverse)
-library(scales) # para ggplot
-
+library(scales) # para ggplot</code></pre>
+</div>
+<p>Al leer los datos a mi dataframe <em>df</em> me encuentro dos inconvenientes: uno, los nombres de las variables del CSV que proporciona EDP no son los que yo quiero, y dos, el campo de fecha es un campo de texto que necesito reformatear.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
 df &lt;- read.csv2(&quot;2019-11 lecturas.csv&quot;, as.is = TRUE)
-names(df) &lt;- c(&quot;fecha&quot;, &quot;kWh_lectura&quot;, &quot;origen&quot;, &quot;facturada&quot;, &quot;X&quot;)
-
+kable(head(df))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">ï..Fecha</th>
+<th style="text-align: right;">Lectura..kWh.</th>
+<th style="text-align: left;">Origen</th>
+<th style="text-align: left;">Facturada</th>
+<th style="text-align: left;">X</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">13 NOV 19</td>
+<td style="text-align: right;">4299</td>
+<td style="text-align: left;">Empresa (real)</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13 OCT 19</td>
+<td style="text-align: right;">4084</td>
+<td style="text-align: left;">Empresa (real)</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13 SEP 19</td>
+<td style="text-align: right;">4060</td>
+<td style="text-align: left;">Empresa (real)</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13 AGO 19</td>
+<td style="text-align: right;">4017</td>
+<td style="text-align: left;">Empresa (real)</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13 JUL 19</td>
+<td style="text-align: right;">3913</td>
+<td style="text-align: left;">Empresa (real)</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13 JUN 19</td>
+<td style="text-align: right;">3881</td>
+<td style="text-align: left;">Empresa (real)</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>En primer lugar, renombro las columnas</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+names(df) &lt;- c(&quot;fecha&quot;, &quot;kWh_lectura&quot;, &quot;origen&quot;, &quot;facturada&quot;, &quot;X&quot;)</code></pre>
+</div>
+<p>y a continuación reemplazo la columna de fecha por tres columnas para el día, el mes y el año. Como hay un espacio inicial, creo una variable falsa con <em>NA</em> que recoja la primera columna, y paso el mes a minúsculas, me interesa para la conversión posterior a formato de fecha.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
 df &lt;- df %&gt;%
     separate(fecha, c(NA, &quot;dia&quot;, &quot;mes&quot;, &quot;año&quot;), &quot; &quot;) %&gt;%
     select(dia, mes, año, kWh_lectura) %&gt;%
     mutate(mes = tolower(mes)) %&gt;%
-    drop_na() 
-
-df$fecha &lt;- as.Date(paste(&quot;20&quot;,df$año,&quot;-&quot;, df$mes,&quot;.-&quot;, df$dia, sep=&quot;&quot;), format = &quot;%Y-%b-%d&quot;) 
-
+    drop_na() </code></pre>
+</div>
+<p>Las fechas son uno de los tipos de columna que más lata dan al convertir datos de un formato a otro (Excel, CSV, Unix, etc). En R siempre es conveniente trabajar en el formato <em>Date</em> y para ello voy a convertir los campos de texto en fecha. Voy a usar el formato de mes con tres letras (reducido), pero en la versión en español de R este formato lleva un punto al final de la abreviatura (ene. feb. mar. etc), por lo que tengo que pegar el punto en la conversión. Lo hago en dos pasos para más claridad, podría hacerlo en uno</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+df$fecha &lt;- paste(&quot;20&quot;,df$año,&quot;-&quot;, df$mes,&quot;.-&quot;, df$dia, sep=&quot;&quot;)
+kable(head(df))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">dia</th>
+<th style="text-align: left;">mes</th>
+<th style="text-align: left;">año</th>
+<th style="text-align: right;">kWh_lectura</th>
+<th style="text-align: left;">fecha</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">nov</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4299</td>
+<td style="text-align: left;">2019-nov.-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">oct</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4084</td>
+<td style="text-align: left;">2019-oct.-13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">sep</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4060</td>
+<td style="text-align: left;">2019-sep.-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">ago</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4017</td>
+<td style="text-align: left;">2019-ago.-13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">jul</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">3913</td>
+<td style="text-align: left;">2019-jul.-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">jun</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">3881</td>
+<td style="text-align: left;">2019-jun.-13</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Una vez en formato correcto, la conversión en formato de fecha es directa y transparente:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+df$fecha &lt;- as.Date(df$fecha, format = &quot;%Y-%b-%d&quot;) 
+kable(head(df))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">dia</th>
+<th style="text-align: left;">mes</th>
+<th style="text-align: left;">año</th>
+<th style="text-align: right;">kWh_lectura</th>
+<th style="text-align: left;">fecha</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">nov</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4299</td>
+<td style="text-align: left;">2019-11-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">oct</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4084</td>
+<td style="text-align: left;">2019-10-13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">sep</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4060</td>
+<td style="text-align: left;">2019-09-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">ago</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">4017</td>
+<td style="text-align: left;">2019-08-13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">jul</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">3913</td>
+<td style="text-align: left;">2019-07-13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">jun</td>
+<td style="text-align: left;">19</td>
+<td style="text-align: right;">3881</td>
+<td style="text-align: left;">2019-06-13</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ahora ya sólo queda calcular los consumos, como diferencia de dos lecturas sucesivas. La serie está ordenada de más antigua a más reciente, por lo que hay que hacer dos correcciones:</p>
+<ul>
+<li><p>cambiar de signo la diferencia calculada, para que sea la más reciente menos la más antigua</p></li>
+<li><p>añadir como primer término un valor <em>NA</em> ya que la serie diferenciada tiene un término menos, y el primero en realidad no existe (el primer término de la serie diferenciada es la diferencia entre el segundo y el primero, por lo que no hay un primero)</p></li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
 df &lt;- df %&gt;% 
   select(fecha, kWh_lectura)
 
-# los consumos son la diferencia entre dos lecturas sucesivas
-# el primer valor no existe porque no se calcula
-df$consumo &lt;- c(-diff(df$kWh_lectura), NA)
-#df$consumo[1] &lt;- NA
-
-ggplot(df, aes(x = fecha, y = consumo)) +
+df$consumo_kWh &lt;- c(-diff(df$kWh_lectura), NA)
+#df$consumo_kWh[1] &lt;- NA</code></pre>
+</div>
+<p>Y ya sólo queda representar los valores con una escala correctamente ordenada y legible en valores de dos meses</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+ggplot(df, aes(x = fecha, y = consumo_kWh)) +
   geom_line() +
   geom_point() +
   theme_bw() +
   scale_x_date(date_breaks = &quot;2 month&quot;, labels = date_format(&quot;%b %y&quot;))</code></pre>
-<p><img src="leyendo-lecturas_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+<p><img src="leyendo-lecturas_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
 </div>
+<p>Bien, finalmente he conseguido mi gáfica de consumos. Hay una pequeña diferencia respecto a la que me envió EDP debido a que EDP ha sumado en enero dos lecturas realizadas en enero, la última quincena del año 2018 y el propio mes de enero 2019.</p>
+<p>Quedan algunas cuestiones para resolver:</p>
+<ul>
+<li><p>Ver si es posible disponer de lecturas más frecuentes, diarias o incluso horarias</p></li>
+<li><p>Pasar las lecturas a valor en euros</p></li>
+</ul>
+<p>Esto será para otro día.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
