@@ -131,7 +131,7 @@ df %>%
 
 ```
 
-Aparentemente la distribución de valores en las tres estaciónes es casi idéntica, con excepción de la velocidad del viento, que es más variable sobre todo en la estación *granja*. También es la estación que tiene menos valores.
+Aparentemente la distribución de valores en las tres estaciónes es casi idéntica, con excepción de la dirección media del viento (*DV_media*), que es más variable sobre todo en la estación *Granja*. También es la estación que tiene menos valores.
 Verifico la distribución:
 
 ```{r , include=TRUE, echo = TRUE, layout="l-screen"}
