@@ -1,5 +1,20 @@
 [
   {
+    "path": "posts/2019-12-12-dando-una-vuelta-al-concurso-r-parte-1/",
+    "title": "Dando una vuelta al concurso R (parte 1)",
+    "description": "Una mirada a los datos del concurso R de 2019",
+    "author": [
+      {
+        "name": "Juan Riera",
+        "url": "https://www.linkedin.com/in/juanriera/"
+      }
+    ],
+    "date": "2019-12-12",
+    "categories": [],
+    "preview": "posts/2019-12-12-dando-una-vuelta-al-concurso-r-parte-1/dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-8-1.png",
+    "last_modified": "2019-12-12T21:52:29+01:00"
+  },
+  {
     "path": "posts/2019-12-01-leyendo-lecturas/",
     "title": "Leyendo lecturas",
     "description": "Leyendo los datos de EDP en R.",
