@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Dando una vuelta al concurso R (parte 1)</title>
+  
+  <meta property="description" itemprop="description" content="Una mirada a los datos del concurso R de 2019"/>
+  
+  
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2019-12-12"/>
+  <meta property="article:created" itemprop="dateCreated" content="2019-12-12"/>
+  <meta name="article:author" content="Juan Riera"/>
+  
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Dando una vuelta al concurso R (parte 1)"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Una mirada a los datos del concurso R de 2019"/>
+  <meta property="og:locale" content="en_US"/>
+  
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Dando una vuelta al concurso R (parte 1)"/>
+  <meta property="twitter:description" content="Una mirada a los datos del concurso R de 2019"/>
+  
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","draft"]}},"value":[{"type":"character","attributes":{},"value":["Dando una vuelta al concurso R (parte 1)"]},{"type":"character","attributes":{},"value":["Una mirada a los datos del concurso R de 2019\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Juan Riera"]},{"type":"character","attributes":{},"value":["https://www.linkedin.com/in/juanriera/"]}]}]},{"type":"character","attributes":{},"value":["12-12-2019"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"logical","attributes":{},"value":[true]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["dando-una-vuelta-al-concurso-r-parte-1_files/bowser-1.9.3/bowser.min.js","dando-una-vuelta-al-concurso-r-parte-1_files/distill-2.2.21/template.v2.js","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-10-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-11-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-12-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-13-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-14-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-15-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-17-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-18-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-19-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-8-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-9-1.png","dando-una-vuelta-al-concurso-r-parte-1_files/jquery-1.11.3/jquery.min.js","dando-una-vuelta-al-concurso-r-parte-1_files/pagedtable-1.1/css/pagedtable.css","dando-una-vuelta-al-concurso-r-parte-1_files/pagedtable-1.1/js/pagedtable.js","dando-una-vuelta-al-concurso-r-parte-1_files/webcomponents-2.0.0/webcomponents.js","descripcion variables.csv"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+  
+  <style type="text/css">
+  
+  body {
+    background-color: white;
+  }
+  
+  .pandoc-table {
+    width: 100%;
+  }
+  
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+  
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+  
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+  
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+  
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+  
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+  
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .shaded .shaded-content {
+    background: white;
+  }
+  
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  d-article {
+    padding-bottom: 30px;
+  }
+  
+  d-appendix {
+    padding-top: 30px;
+  }
+  
+  d-article>p>img {
+    width: 100%;
+  }
+  
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+  
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+  
+  /* CSS for table of contents */
+  
+  .d-toc {
+    color: rgba(0,0,0,0.8);
+    font-size: 0.8em;
+    line-height: 1em;
+  }
+  
+  .d-toc-header {
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 1.3em;
+  }
+  
+  .d-toc a {
+    border-bottom: none;
+  }
+  
+  .d-toc ul {
+    padding-left: 0;
+  }
+  
+  .d-toc li>ul {
+    padding-top: 0.8em;
+    padding-left: 16px;
+    margin-bottom: 0.6em;
+  }
+  
+  .d-toc ul,
+  .d-toc li {
+    list-style-type: none;
+  }
+  
+  .d-toc li {
+    margin-bottom: 0.9em;
+  }
+  
+  .d-toc-separator {
+    margin-top: 20px;
+    margin-bottom: 2em;
+  }
+  
+  .d-article-with-toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  
+  
+  
+  /* Tweak code blocks (note that this CSS is repeated above in an injection
+     into the d-code shadow dom) */
+  
+  d-code {
+    overflow-x: auto !important;
+  }
+  
+  pre.d-code code.d-code {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+  
+  pre.text-output {
+  
+    font-size: 12px;
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+  
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+  
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+  
+  @media(min-width: 768px) {
+  
+  d-code {
+    overflow-x: visible !important;
+  }
+  
+  pre.d-code code.d-code  {
+      padding-left: 18px;
+      font-size: 14px;
+  }
+  pre.text-output {
+    font-size: 14px;
+  }
+  }
+  
+  /* Figure */
+  
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+  
+  .figure img {
+    width: 100%;
+  }
+  
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+  
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+  
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+  
+  
+  
+  /* Tweak 1000px media break to show more text */
+  
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+  
+    .grid {
+      grid-column-gap: 16px;
+    }
+  
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+  
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+  
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+  
+  
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+  
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  
+  /* Social footer */
+  
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+  
+  .disqus-comments {
+    margin-right: 30px;
+  }
+  
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+  
+  #disqus_thread {
+    margin-top: 30px;
+  }
+  
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+  
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+  
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+  
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+  
+  
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+  
+  
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+  
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+  
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+  
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+  
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+  
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+  
+  
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+  
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+  
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+  
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+  
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+  
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+  
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+  
+  </style>
+  
+  <script type="application/javascript">
+  
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+  
+  // show body when load is complete
+  function on_load_complete() {
+  
+    // set body to visible
+    document.body.style.visibility = 'visible';
+  
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+  
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+  
+  function init_distill() {
+  
+    init_common();
+  
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+  
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+  
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+  
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+  
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+  
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+  
+    // create d-bibliography
+    var bibliography = $('<d-bibliography></d-bibliography>');
+    $('#distill-bibliography').wrap(bibliography);
+  
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+  
+    // replace citations with <d-cite>
+    $('.citation').each(function(i, val) {
+      appendix = true;
+      var cites = $(this).attr('data-cites').split(" ");
+      var dt_cite = $('<d-cite></d-cite>');
+      dt_cite.attr('key', cites.join());
+      $(this).replaceWith(dt_cite);
+    });
+    // remove refs
+    $('#refs').remove();
+  
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+  
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-toc a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+  
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+  
+    // replace code blocks with d-code
+    $('pre>code').each(function(i, val) {
+      var code = $(this);
+      var pre = code.parent();
+      var clz = "";
+      var language = pre.attr('class');
+      if (language) {
+        // map unknown languages to "clike" (without this they just dissapear)
+        if ($.inArray(language, ["bash", "clike", "css", "go", "html",
+                                 "javascript", "js", "julia", "lua", "markdown",
+                                 "markup", "mathml", "python", "svg", "xml"]) == -1)
+          language = "clike";
+        language = ' language="' + language + '"';
+        var dt_code = $('<d-code block' + language + clz + '></d-code>');
+        dt_code.text(code.text());
+        pre.replaceWith(dt_code);
+      } else {
+        code.addClass('text-output').unwrap().changeElementType('pre');
+      }
+    });
+  
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+  
+      // capture layout
+      var layout = $(this).attr('data-layout');
+  
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('d-code, pre.text-output, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+  
+  
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+  
+    // load distill framework
+    load_distill_framework();
+  
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+  
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+  
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+  
+      // table of contents
+      if (have_authors) // adjust border if we are in authors
+        $('.d-toc').parent().addClass('d-article-with-toc');
+  
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+  
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+  
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+  
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+  
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+  
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+  
+      // inject pre code styles (can't do this with a global stylesheet b/c a shadow root is used)
+      $('d-code').each(function(i, val) {
+        var style = document.createElement('style');
+        style.innerHTML = 'pre code { padding-left: 10px; font-size: 12px; border-left: 2px solid rgba(0,0,0,0.1); } ' +
+                          '@media(min-width: 768px) { pre code { padding-left: 18px; font-size: 14px; } }';
+        if (this.shadowRoot)
+          this.shadowRoot.appendChild(style);
+      });
+  
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+  
+      // clear polling timer
+      clearInterval(tid);
+  
+      // show body now that everything is ready
+      on_load_complete();
+    }
+  
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+  
+  }
+  
+  function init_downlevel() {
+  
+    init_common();
+  
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+  
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+  
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+  
+    // remove toc
+    $('.d-toc-header').remove();
+    $('.d-toc').remove();
+    $('.d-toc-separator').remove();
+  
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+  
+  
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+  
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+  
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+  
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+  
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+  
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+  
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+  
+    $('body').addClass('downlevel');
+  
+    on_load_complete();
+  }
+  
+  
+  function init_common() {
+  
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+  
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+  
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+  
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+  
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+  
+      }
+    });
+  
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+  
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+  
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+  
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+  
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+  
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+  
+  </script>
+  
+  <!--/radix_placeholder_distill-->
+  <link href="dando-una-vuelta-al-concurso-r-parte-1_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+  <script src="dando-una-vuelta-al-concurso-r-parte-1_files/pagedtable-1.1/js/pagedtable.js"></script>
+  <script src="dando-una-vuelta-al-concurso-r-parte-1_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="dando-una-vuelta-al-concurso-r-parte-1_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="dando-una-vuelta-al-concurso-r-parte-1_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="dando-una-vuelta-al-concurso-r-parte-1_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Dando una vuelta al concurso R (parte 1)","description":"Una mirada a los datos del concurso R de 2019","authors":[{"author":"Juan Riera","authorURL":"https://www.linkedin.com/in/juanriera/","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2019-12-12T00:00:00.000+01:00","citationText":"Riera, 2019"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Dando una vuelta al concurso R (parte 1)</h1>
+<p><p>Una mirada a los datos del concurso R de 2019</p></p>
+</div>
+
+<div class="d-byline">
+  Juan Riera <a href="https://www.linkedin.com/in/juanriera/" class="uri">https://www.linkedin.com/in/juanriera/</a> 
+  
+<br/>12-12-2019
+</div>
+
+<div class="d-article">
+<p>El pasado mes de noviembre, mientras preparaba algunas notas de la presentación a las Jornadas R con una persona de mi equipo, encontré la página del grupo R de Asturias, y en ella la reseña de un concurso de análisis de datos mediante R en su segunda convocatoria. La fecha límite de presentación era octubre, por lo que estaba ya fuera de plazo, y tampoco los concursos me interesan demasiado; no obstante, me propuse echar una mirada a los datos cuando tuviese tiempo, para poder después intercambiar comentarios con el equipo R de Asturias, con el que me había propuesto conectar.</p>
+<p>Este fin de semana me descargué las bases de datos, cargué mis librerías de trabajo y me puse a ello.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+library(knitr)
+library(rmarkdown)
+library (tidyverse)
+library(scales) # para ggplot
+
+load (&quot;Carrizal.RData&quot;)
+load (&quot;Canizal.RData&quot;)
+load (&quot;Granja.RData&quot;)</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+paged_table(head(granja, n=20))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["TIMESTAMP"],"name":[1],"type":["S3: POSIXct"],"align":["right"]},{"label":["RECORD"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Lluvia_Tot"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Vel_Viento_Max"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["VV_media"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["DV_media"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Desv_Stand_DV"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Temp_Aire_Avg"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["VP_KPA_Avg"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["VPD_KPA_Avg"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Hum_Rel_Avg"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Radiacion_Avg"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Rad_acum_Tot"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["estacion"],"name":[14],"type":["chr"],"align":["left"]},{"label":["latitud"],"name":[15],"type":["chr"],"align":["left"]},{"label":["longitud"],"name":[16],"type":["chr"],"align":["left"]}],"data":[{"1":"2009-01-01 00:10:00","2":"73680","3":"0.0","4":"0.872","5":"0.571","6":"176.70","7":"23.480","8":"7.125","9":"0.942","10":"0.067","11":"93.3","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:20:00","2":"73681","3":"0.0","4":"1.490","5":"0.827","6":"181.30","7":"17.410","8":"6.736","9":"0.915","10":"0.068","11":"93.1","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:30:00","2":"73682","3":"0.0","4":"0.799","5":"0.409","6":"138.70","7":"24.270","8":"6.634","9":"0.920","10":"0.057","11":"94.2","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:40:00","2":"73683","3":"0.0","4":"0.735","5":"0.161","6":"141.10","7":"13.330","8":"6.694","9":"0.925","10":"0.055","11":"94.4","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:50:00","2":"73684","3":"0.0","4":"0.936","5":"0.362","6":"217.70","7":"24.340","8":"6.678","9":"0.924","10":"0.055","11":"94.4","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:00:00","2":"73685","3":"0.0","4":"0.250","5":"0.027","6":"289.30","7":"28.530","8":"6.469","9":"0.911","10":"0.055","11":"94.3","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:10:00","2":"73686","3":"0.0","4":"0.490","5":"0.175","6":"156.20","7":"27.270","8":"6.395","9":"0.909","10":"0.052","11":"94.6","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:20:00","2":"73687","3":"0.0","4":"0.823","5":"0.324","6":"178.30","7":"19.050","8":"6.355","9":"0.908","10":"0.049","11":"94.8","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:30:00","2":"73688","3":"0.0","4":"0.500","5":"0.073","6":"67.42","7":"4.984","8":"6.331","9":"0.908","10":"0.048","11":"95.0","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:40:00","2":"73689","3":"0.0","4":"0.735","5":"0.191","6":"42.50","7":"42.590","8":"6.300","9":"0.908","10":"0.046","11":"95.1","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:50:00","2":"73690","3":"0.0","4":"0.975","5":"0.563","6":"131.80","7":"63.810","8":"6.311","9":"0.910","10":"0.045","11":"95.3","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:00:00","2":"73691","3":"0.0","4":"1.651","5":"1.390","6":"54.95","7":"7.565","8":"6.504","9":"0.924","10":"0.043","11":"95.5","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:10:00","2":"73692","3":"0.0","4":"1.676","5":"1.013","6":"69.10","7":"8.890","8":"7.000","9":"0.953","10":"0.048","11":"95.2","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:20:00","2":"73693","3":"0.0","4":"1.646","5":"0.644","6":"330.00","7":"56.440","8":"7.306","9":"0.937","10":"0.086","11":"91.6","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:30:00","2":"73694","3":"0.0","4":"1.112","5":"0.647","6":"209.00","7":"18.640","8":"6.586","9":"0.899","10":"0.075","11":"92.3","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:40:00","2":"73695","3":"0.0","4":"0.666","5":"0.386","6":"124.00","7":"64.560","8":"6.329","9":"0.896","10":"0.060","11":"93.7","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:50:00","2":"73696","3":"0.0","4":"0.691","5":"0.395","6":"48.52","7":"2.043","8":"6.165","9":"0.891","10":"0.054","11":"94.3","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:00:00","2":"73697","3":"0.0","4":"0.696","5":"0.400","6":"174.50","7":"75.050","8":"6.239","9":"0.901","10":"0.049","11":"94.8","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:10:00","2":"73698","3":"0.0","4":"1.308","5":"0.825","6":"41.41","7":"31.650","8":"6.302","9":"0.906","10":"0.048","11":"95.0","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:20:00","2":"73699","3":"0.2","4":"1.009","5":"0.512","6":"90.60","7":"60.970","8":"6.381","9":"0.914","10":"0.046","11":"95.2","12":"0","13":"0","14":"granja","15":"41.3130361","16":"-5.366066666666666"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<p>El origen y tipo de datos está explicado en la página del concurso, en <a href="https://rusersasturias.github.io/contest/" class="uri">https://rusersasturias.github.io/contest/</a>, así como las bases del concurso.</p>
+<p>Para facilitarme la lectura de los contenidos de las variables, me creé también una tabla con las descripciones de las etiquetas de columna ; estas descripciones pueden incorporarse a las etiquetas de factor mediante la funcion <em>label()</em></p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+etiquetas &lt;- read.csv2(&quot;descripcion variables.csv&quot;)
+paged_table(etiquetas)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["num"],"name":[1],"type":["int"],"align":["right"]},{"label":["variable"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["descripcion"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["comentario"],"name":[4],"type":["fctr"],"align":["left"]}],"data":[{"1":"1","2":"TIMESTAMP","3":"Fecha","4":"marca de fecha y hora  en formato POSIXct"},{"1":"2","2":"RECORD","3":"Número de registro","4":"Número de registro"},{"1":"3","2":"Lluvia_Tot","3":"Lluvia total","4":"cantidad de lluvia acumulada en ese intervalo (10 minutos), expresada en milímetros (mm)."},{"1":"4","2":"Vel_Viento_Max","3":"Velocidad máxima del viento","4":"velocidad máxima del viento en un instante (también llamada racha máxima), en ese intervalo de tiempo. Se expresa en metros/segundo (m/s)."},{"1":"5","2":"VV_media","3":"Velocidad media del viento","4":"velocidad media en el intervalo dado (10 minutos). Se expresa en metros/segundos (m/s)."},{"1":"6","2":"DV_media","3":"Dirección media del viento","4":"en el intervalo de diez minutos, el valor medio de la dirección del viento, expresado en grados (sentido de las agujas del reloj, desde el norte)."},{"1":"7","2":"Desv_Stand_DV","3":"Desviación estándar de la dirección del viento","4":"desviación estándar de la variable anterior, expresada en grados (sentido de las agujas del reloj, desde el norte)."},{"1":"8","2":"Temp_Aire_Avg","3":"Temperatura del aire","4":"media de la temperatura en el periodo de tiempo medido (10 minutos), expresada en grados centígrados (?C)."},{"1":"9","2":"VP_KPA_Avg","3":"Promedio de la presión de vapor","4":"promedio de la humedad que hay en el aire en ese periodo de tiempo (10 minutos), pero expresada en términos de presión vapor. Esta es la cantidad de presión con la que contribuye el vapor de agua a la presión atmosférica. Se expresa en kilopascales (kPa)."},{"1":"10","2":"VPD_KPA_Avg","3":"Promedio del déficit de la presión de vapor","4":"promedio, en ese periodo de tiempo de 10 minutos, de la diferencia entre la presión de vapor saturante y la real, es decir, cuánto nos falta con la presión de vapor que tenemos para llegar a la saturación. En otras palabras, cuán seco está el aire. Así, cuando este valor es muy alto, se separa / aleja mucho de la saturación (hay poco vapor en el aire). Esto se traduce en que la atmósfera está demandando agua, lo cual hace que la fotosíntesis de las plantas se resienta. Estas cierran los estomas para protegerse y no perder agua, y eso va en su contra. Se expresa en kilopascales (kPa)."},{"1":"11","2":"Hum_Rel_Avg","3":"Promedio de la humedad relativa","4":"esta es otra forma de expresar la humedad, de manera relativa. Es el promedio, en ese periodo de tiempo de 10 minutos, del porcentaje de humedad que tiene el aire, respecto a la saturación. Es una, producto de dividir la humedad que tiene el aire entre la humedad de saturación a esa misma temperatura, y multiplicándolo por cien. Se expresa en porcentaje (%)."},{"1":"12","2":"Radiacion_Avg","3":"Promedio de radiación solar","4":"promedio, en ese periodo de tiempo de 10 minutos, de la cantidad de energía que se recibe del Sol o, en otras palabras, de la energía incidente que llega a la superficie de la Tierra. Se expresa en vatios por metro cuadrado (W/m2)."},{"1":"13","2":"Rad_acum_Tot","3":"Radiación acumulada total","4":"acumulado de la radiación solar en el intervalo de 10 minutos. Se expresa en megajulios por metro cuadrado (MJ/m2)."},{"1":"14","2":"estacion","3":"Denominación de la estación","4":"Denominación de la estación"},{"1":"15","2":"latitud","3":"Latitud","4":"Coordenadas de latitud de la estación"},{"1":"16","2":"longitud","3":"Longitud","4":"Coordenadas de longitud de la estación"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<p>Desgraciadamente, hay algún problema que aparece después en las llamadas a funciones <em>tidyverse</em>, o bien yo no he sabido utilizarlo, por lo que he descartado usar esta opción.</p>
+<p>Esta sería la forma de hacerlo, sobre el dataframe <em>df</em>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+library(Hmisc)
+
+df &lt;- granja
+
+nombres &lt;- as.vector(etiquetas$descripcion)
+variables &lt;- as.vector(etiquetas$variable)
+label(df) &lt;- as.list(nombres[match(names(df), variables)])
+
+paged_table(head(df,, n=50))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["TIMESTAMP"],"name":[1],"type":["S3: labelled"],"align":["right"]},{"label":["RECORD"],"name":[2],"type":["S3: labelled"],"align":["right"]},{"label":["Lluvia_Tot"],"name":[3],"type":["S3: labelled"],"align":["right"]},{"label":["Vel_Viento_Max"],"name":[4],"type":["S3: labelled"],"align":["right"]},{"label":["VV_media"],"name":[5],"type":["S3: labelled"],"align":["right"]},{"label":["DV_media"],"name":[6],"type":["S3: labelled"],"align":["right"]},{"label":["Desv_Stand_DV"],"name":[7],"type":["S3: labelled"],"align":["right"]},{"label":["Temp_Aire_Avg"],"name":[8],"type":["S3: labelled"],"align":["right"]},{"label":["VP_KPA_Avg"],"name":[9],"type":["S3: labelled"],"align":["right"]},{"label":["VPD_KPA_Avg"],"name":[10],"type":["S3: labelled"],"align":["right"]},{"label":["Hum_Rel_Avg"],"name":[11],"type":["S3: labelled"],"align":["right"]},{"label":["Radiacion_Avg"],"name":[12],"type":["S3: labelled"],"align":["right"]},{"label":["Rad_acum_Tot"],"name":[13],"type":["S3: labelled"],"align":["right"]},{"label":["estacion"],"name":[14],"type":["S3: labelled"],"align":["right"]},{"label":["latitud"],"name":[15],"type":["S3: labelled"],"align":["right"]},{"label":["longitud"],"name":[16],"type":["S3: labelled"],"align":["right"]}],"data":[{"1":"2009-01-01 00:10:00","2":"73680","3":"0.0","4":"0.872","5":"0.571","6":"176.70","7":"23.480","8":"7.125","9":"0.942","10":"0.067","11":"93.3","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:20:00","2":"73681","3":"0.0","4":"1.490","5":"0.827","6":"181.30","7":"17.410","8":"6.736","9":"0.915","10":"0.068","11":"93.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:30:00","2":"73682","3":"0.0","4":"0.799","5":"0.409","6":"138.70","7":"24.270","8":"6.634","9":"0.920","10":"0.057","11":"94.2","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:40:00","2":"73683","3":"0.0","4":"0.735","5":"0.161","6":"141.10","7":"13.330","8":"6.694","9":"0.925","10":"0.055","11":"94.4","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 00:50:00","2":"73684","3":"0.0","4":"0.936","5":"0.362","6":"217.70","7":"24.340","8":"6.678","9":"0.924","10":"0.055","11":"94.4","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:00:00","2":"73685","3":"0.0","4":"0.250","5":"0.027","6":"289.30","7":"28.530","8":"6.469","9":"0.911","10":"0.055","11":"94.3","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:10:00","2":"73686","3":"0.0","4":"0.490","5":"0.175","6":"156.20","7":"27.270","8":"6.395","9":"0.909","10":"0.052","11":"94.6","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:20:00","2":"73687","3":"0.0","4":"0.823","5":"0.324","6":"178.30","7":"19.050","8":"6.355","9":"0.908","10":"0.049","11":"94.8","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:30:00","2":"73688","3":"0.0","4":"0.500","5":"0.073","6":"67.42","7":"4.984","8":"6.331","9":"0.908","10":"0.048","11":"95.0","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:40:00","2":"73689","3":"0.0","4":"0.735","5":"0.191","6":"42.50","7":"42.590","8":"6.300","9":"0.908","10":"0.046","11":"95.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 01:50:00","2":"73690","3":"0.0","4":"0.975","5":"0.563","6":"131.80","7":"63.810","8":"6.311","9":"0.910","10":"0.045","11":"95.3","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:00:00","2":"73691","3":"0.0","4":"1.651","5":"1.390","6":"54.95","7":"7.565","8":"6.504","9":"0.924","10":"0.043","11":"95.5","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:10:00","2":"73692","3":"0.0","4":"1.676","5":"1.013","6":"69.10","7":"8.890","8":"7.000","9":"0.953","10":"0.048","11":"95.2","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:20:00","2":"73693","3":"0.0","4":"1.646","5":"0.644","6":"330.00","7":"56.440","8":"7.306","9":"0.937","10":"0.086","11":"91.6","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:30:00","2":"73694","3":"0.0","4":"1.112","5":"0.647","6":"209.00","7":"18.640","8":"6.586","9":"0.899","10":"0.075","11":"92.3","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:40:00","2":"73695","3":"0.0","4":"0.666","5":"0.386","6":"124.00","7":"64.560","8":"6.329","9":"0.896","10":"0.060","11":"93.7","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 02:50:00","2":"73696","3":"0.0","4":"0.691","5":"0.395","6":"48.52","7":"2.043","8":"6.165","9":"0.891","10":"0.054","11":"94.3","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:00:00","2":"73697","3":"0.0","4":"0.696","5":"0.400","6":"174.50","7":"75.050","8":"6.239","9":"0.901","10":"0.049","11":"94.8","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:10:00","2":"73698","3":"0.0","4":"1.308","5":"0.825","6":"41.41","7":"31.650","8":"6.302","9":"0.906","10":"0.048","11":"95.0","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:20:00","2":"73699","3":"0.2","4":"1.009","5":"0.512","6":"90.60","7":"60.970","8":"6.381","9":"0.914","10":"0.046","11":"95.2","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:30:00","2":"73700","3":"0.0","4":"1.205","5":"0.689","6":"149.90","7":"14.300","8":"6.676","9":"0.933","10":"0.046","11":"95.3","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:40:00","2":"73701","3":"0.0","4":"1.264","5":"0.695","6":"160.10","7":"24.680","8":"6.481","9":"0.917","10":"0.049","11":"94.9","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 03:50:00","2":"73702","3":"0.0","4":"1.416","5":"1.067","6":"166.90","7":"27.710","8":"6.434","9":"0.916","10":"0.047","11":"95.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 04:00:00","2":"73703","3":"0.0","4":"1.259","5":"0.901","6":"159.40","7":"18.300","8":"6.309","9":"0.909","10":"0.046","11":"95.2","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 04:10:00","2":"73704","3":"0.4","4":"0.519","5":"0.142","6":"88.60","7":"39.750","8":"6.348","9":"0.913","10":"0.044","11":"95.4","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 04:20:00","2":"73705","3":"0.2","4":"1.029","5":"0.613","6":"180.40","7":"18.540","8":"6.441","9":"0.921","10":"0.043","11":"95.6","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 04:30:00","2":"73706","3":"0.0","4":"0.000","5":"0.000","6":"0.00","7":"0.000","8":"6.394","9":"0.918","10":"0.043","11":"95.6","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 04:40:00","2":"73707","3":"0.2","4":"0.470","5":"0.078","6":"53.63","7":"33.630","8":"6.321","9":"0.913","10":"0.042","11":"95.6","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 04:50:00","2":"73708","3":"0.0","4":"0.799","5":"0.255","6":"63.37","7":"6.384","8":"6.390","9":"0.919","10":"0.041","11":"95.7","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 05:00:00","2":"73709","3":"0.0","4":"0.779","5":"0.416","6":"178.80","7":"6.189","8":"6.418","9":"0.921","10":"0.041","11":"95.8","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 05:10:00","2":"73710","3":"0.2","4":"1.083","5":"0.864","6":"156.50","7":"23.190","8":"6.361","9":"0.918","10":"0.040","11":"95.8","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 05:20:00","2":"73711","3":"0.0","4":"0.843","5":"0.516","6":"112.10","7":"16.400","8":"6.375","9":"0.920","10":"0.039","11":"95.9","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 05:30:00","2":"73712","3":"0.0","4":"0.960","5":"0.410","6":"122.50","7":"21.790","8":"6.387","9":"0.922","10":"0.038","11":"96.0","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 05:40:00","2":"73713","3":"0.0","4":"0.833","5":"0.466","6":"88.20","7":"16.060","8":"6.381","9":"0.921","10":"0.038","11":"96.0","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 05:50:00","2":"73714","3":"0.0","4":"0.470","5":"0.192","6":"16.89","7":"21.510","8":"6.398","9":"0.923","10":"0.038","11":"96.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 06:00:00","2":"73715","3":"0.0","4":"0.662","5":"0.059","6":"217.00","7":"24.610","8":"6.308","9":"0.917","10":"0.038","11":"96.0","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 06:10:00","2":"73716","3":"0.0","4":"0.466","5":"0.098","6":"45.89","7":"0.034","8":"6.389","9":"0.923","10":"0.037","11":"96.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 06:20:00","2":"73717","3":"0.2","4":"0.622","5":"0.341","6":"61.17","7":"11.410","8":"6.443","9":"0.926","10":"0.037","11":"96.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 06:30:00","2":"73718","3":"0.0","4":"0.715","5":"0.356","6":"143.10","7":"11.010","8":"6.512","9":"0.931","10":"0.037","11":"96.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 06:40:00","2":"73719","3":"0.0","4":"0.593","5":"0.462","6":"166.40","7":"8.210","8":"6.558","9":"0.933","10":"0.038","11":"96.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 06:50:00","2":"73720","3":"0.0","4":"1.343","5":"0.931","6":"141.60","7":"12.260","8":"6.612","9":"0.937","10":"0.038","11":"96.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 07:00:00","2":"73721","3":"0.0","4":"0.907","5":"0.589","6":"153.10","7":"8.240","8":"6.669","9":"0.940","10":"0.038","11":"96.1","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 07:10:00","2":"73722","3":"0.0","4":"1.651","5":"1.252","6":"137.90","7":"8.600","8":"6.698","9":"0.942","10":"0.039","11":"96.0","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 07:20:00","2":"73723","3":"0.0","4":"1.749","5":"1.145","6":"119.80","7":"13.700","8":"6.757","9":"0.945","10":"0.040","11":"96.0","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 07:30:00","2":"73724","3":"0.0","4":"0.828","5":"0.351","6":"124.40","7":"14.430","8":"6.822","9":"0.948","10":"0.041","11":"95.8","12":"0.000","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 07:40:00","2":"73725","3":"0.0","4":"0.632","5":"0.047","6":"206.10","7":"0.015","8":"6.841","9":"0.948","10":"0.042","11":"95.8","12":"0.268","13":"0.000","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 07:50:00","2":"73726","3":"0.0","4":"0.676","5":"0.531","6":"186.60","7":"6.063","8":"6.711","9":"0.939","10":"0.043","11":"95.6","12":"1.092","13":"0.001","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 08:00:00","2":"73727","3":"0.0","4":"0.505","5":"0.309","6":"130.30","7":"16.760","8":"6.690","9":"0.938","10":"0.043","11":"95.7","12":"3.544","13":"0.002","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 08:10:00","2":"73728","3":"0.0","4":"0.740","5":"0.580","6":"130.20","7":"10.380","8":"6.736","9":"0.942","10":"0.042","11":"95.8","12":"5.238","13":"0.003","14":"granja","15":"41.3130361","16":"-5.366066666666666"},{"1":"2009-01-01 08:20:00","2":"73729","3":"0.0","4":"0.902","5":"0.521","6":"110.20","7":"21.740","8":"6.909","9":"0.954","10":"0.041","11":"95.8","12":"12.140","13":"0.007","14":"granja","15":"41.3130361","16":"-5.366066666666666"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<p>La tabla muesta la línea ne la que aparecen las etiquetas de descripción que pueden visualizarse en RStudio mediante la instrucción <em>view(df)</em></p>
+<p>En cualquier caso, no las utilizaré aquí para no alterar el funcionamiento de los <em>pipe</em></p>
+<p>Volviendo a los datos, como la estructura de las tres tablas es idéntica y cada tabla está bien identificada mediante la columna <em>estacion</em>, he preferido analizar los datos en conjunto, y para ello los incluyo en un único dataframe.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+df &lt;- full_join(canizal,carrizal)
+df &lt;- full_join(df,granja)
+
+paged_table(as.data.frame(str(df)))</code></pre>
+<pre><code>
+Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   1549765 obs. of  16 variables:
+ $ TIMESTAMP     : POSIXct, format: &quot;2008-12-31 23:50:00&quot; ...
+ $ RECORD        : num  87018 87019 87020 87021 87022 ...
+ $ Lluvia_Tot    : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ Vel_Viento_Max: num  0.892 0.221 0.5 0.578 0.691 ...
+ $ VV_media      : num  0.376 0.018 0.062 0.203 0.361 0.658 0.139 0.387 0.606 0.506 ...
+ $ DV_media      : num  42.65 340.6 33.26 22.88 2.08 ...
+ $ Desv_Stand_DV : num  36.28 0.014 1.386 5.241 28.11 ...
+ $ Temp_Aire_Avg : num  6.38 6.38 6.42 6.43 6.5 ...
+ $ VP_KPA_Avg    : num  0.911 0.913 0.917 0.918 0.923 0.915 0.912 0.916 0.921 0.916 ...
+ $ VPD_KPA_Avg   : num  0.048 0.046 0.045 0.045 0.044 0.046 0.045 0.042 0.044 0.045 ...
+ $ Hum_Rel_Avg   : num  95 95.2 95.3 95.3 95.4 95.2 95.3 95.6 95.4 95.3 ...
+ $ Radiacion_Avg : num  0.045 0.03 0.136 0.121 0.091 0.015 0.091 0.03 0 0.076 ...
+ $ Rad_acum_Tot  : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ estacion      : chr  &quot;canizal&quot; &quot;canizal&quot; &quot;canizal&quot; &quot;canizal&quot; ...
+ $ latitud       : chr  &quot;41.2107472&quot; &quot;41.2107472&quot; &quot;41.2107472&quot; &quot;41.2107472&quot; ...
+ $ longitud      : chr  &quot;-5.3634916666666665&quot; &quot;-5.3634916666666665&quot; &quot;-5.3634916666666665&quot; &quot;-5.3634916666666665&quot; ...</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[],"data":[],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<p>Tenemos algo más de 1,5 millones de lecturas de tres estaciones, con una columna de fecha en formato POSIX y la latitud y longitud de cada estación que están en formato texto.</p>
+<p>Lo primero que suelo hacer al iniciar la exploración es construir una tabla resumen de los datos:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+resumen &lt;- do.call(cbind, lapply(df, summary))
+resumen &lt;- as.data.frame(t(resumen))
+
+## tabla para Rmarkdown
+paged_table(resumen)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Min."],"name":[1],"type":["fctr"],"align":["left"]},{"label":["1st Qu."],"name":[2],"type":["fctr"],"align":["left"]},{"label":["Median"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["Mean"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["3rd Qu."],"name":[5],"type":["fctr"],"align":["left"]},{"label":["Max."],"name":[6],"type":["fctr"],"align":["left"]},{"label":["NA's"],"name":[7],"type":["fctr"],"align":["left"]}],"data":[{"1":"1230767400","2":"1313364600","3":"1391106600","4":"1391545041.57366","5":"1468812600","6":"1546300800","7":"1230767400","_rn_":"TIMESTAMP","_row":"TIMESTAMP"},{"1":"0","2":"128078","3":"221649","4":"245484.078615145","5":"346585","6":"612905","7":"0","_rn_":"RECORD","_row":"RECORD"},{"1":"0","2":"0","3":"0","4":"0.00691653250654132","5":"0","6":"10","7":"0","_rn_":"Lluvia_Tot","_row":"Lluvia_Tot"},{"1":"0","2":"1.764","3":"3.224","4":"3.84694802824944","5":"5.292","6":"29.74","7":"0","_rn_":"Vel_Viento_Max","_row":"Vel_Viento_Max"},{"1":"0","2":"1.093","3":"2.057","4":"2.56389440915236","5":"3.512","6":"24.07","7":"0","_rn_":"VV_media","_row":"VV_media"},{"1":"0","2":"82.4","3":"224.8","4":"191.274353458105","5":"269.9","6":"360","7":"0","_rn_":"DV_media","_row":"DV_media"},{"1":"0","2":"8.56","3":"12.89","4":"16.9091257506783","5":"20.78","6":"103.5","7":"0","_rn_":"Desv_Stand_DV","_row":"Desv_Stand_DV"},{"1":"-54.33","2":"5.842","3":"11.06","4":"12.1365947735234","5":"17.77","6":"40.7","7":"2","_rn_":"Temp_Aire_Avg","_row":"Temp_Aire_Avg"},{"1":"-2.021","2":"0.666","3":"0.85","4":"0.875760816331271","5":"1.059","6":"2.449","7":"2","_rn_":"VP_KPA_Avg","_row":"VP_KPA_Avg"},{"1":"-0.086","2":"0.135","3":"0.356","4":"0.748020878676288","5":"1.002","6":"7.024","7":"2","_rn_":"VPD_KPA_Avg","_row":"VPD_KPA_Avg"},{"1":"-31.84","2":"47.14","3":"71.22","4":"65.535895553062","5":"85.8","6":"110.2","7":"2","_rn_":"Hum_Rel_Avg","_row":"Hum_Rel_Avg"},{"1":"0","2":"0","3":"4.497","4":"187.491159701132","5":"318.1","6":"2855","7":"2193","_rn_":"Radiacion_Avg","_row":"Radiacion_Avg"},{"1":"0","2":"0","3":"0.003","4":"0.112486995120572","5":"0.191","6":"1.71275","7":"2193","_rn_":"Rad_acum_Tot","_row":"Rad_acum_Tot"},{"1":"1549765","2":"character","3":"character","4":"1549765","5":"character","6":"character","7":"1549765","_rn_":"estacion","_row":"estacion"},{"1":"1549765","2":"character","3":"character","4":"1549765","5":"character","6":"character","7":"1549765","_rn_":"latitud","_row":"latitud"},{"1":"1549765","2":"character","3":"character","4":"1549765","5":"character","6":"character","7":"1549765","_rn_":"longitud","_row":"longitud"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<p>Me llama la atención que la mediana de la columna <em>Lluvia_Tot</em> es cero, también algunos valores mínimos como la temperatura del aire de -54ºC, y algunos valores negativos de presión de vapor. Pueden ser datos anormales, que verificaré mediante boxplot.</p>
+<p>Pero antes hay que reformatear las fechas en formate <em>Date</em>, añadiendo algunos criterios que puedo necesitar más tarde, como los meses, las semanas o incluso los días de la semana. En vez de crear campos de texto con las agrupaciones, prefiero crear campos de fecha con la fecha ajustada a la opción que busco, utilizando la función <em>cut()</em>, y luego formateo la fecha en la presentación. De esta forma las fechas siempre tienen el formato de fecha correcto.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+## conversiones de fechas que son útiles para agrupar más tarde
+df$fecha &lt;- as.Date(df$TIMESTAMP)
+df$dia &lt;- as.Date(cut(df$fecha, &quot;day&quot;))
+df$semana &lt;- as.Date(cut(df$fecha, &quot;week&quot;))
+df$mes &lt;- as.Date(cut(df$fecha, &quot;month&quot;))
+df$año &lt;- as.Date(cut(df$fecha, &quot;year&quot;))
+df$diasemana &lt;- format(df$fecha,&quot;%A&quot;)
+df$diasemana &lt;- factor(df$diasemana, levels=c(&quot;lunes&quot;,&quot;martes&quot;,&quot;miércoles&quot;,&quot;jueves&quot;,&quot;viernes&quot;,&quot;sábado&quot;,&quot;domingo&quot;),ordered=TRUE)</code></pre>
+</div>
+<p>Aunque suelo empezar las exploraciones con las funciones de base de R (histogramas y boxplot), en este caso me parece más práctico hacer una primera matriz de gráficos de todas las variables numéricas agrupadas por estación.</p>
+<div class="layout-chunk" data-layout="l-screen">
+<pre class="r"><code>
+# basado en
+# https://drsimonj.svbtle.com/quick-plot-of-all-variables
+df %&gt;%
+  select (-TIMESTAMP,-RECORD, -c(latitud:diasemana)) %&gt;%
+  pivot_longer(-estacion, names_to = &quot;key&quot;, values_to = &quot;value&quot;) %&gt;%
+  ggplot(aes(value)) +
+  facet_wrap(~ key, scales = &quot;free&quot;) +
+  geom_histogram(aes(colour = estacion), alpha = 0.2) +
+  theme_bw() +
+  theme(text = element_text(size=6)) +
+  xlab (&quot;Valores&quot;) +
+  scale_y_continuous(name = &quot;Núm de casos&quot;, labels = comma)</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<p>Aparentemente la distribución de valores en las tres estaciónes es casi idéntica, con excepción de la velocidad del viento, que es más variable sobre todo en la estación <em>granja</em>. También es la estación que tiene menos valores. Verifico la distribución:</p>
+<div class="layout-chunk" data-layout="l-screen">
+<pre class="r"><code>
+df %&gt;%
+  select (-TIMESTAMP,-RECORD, -c(latitud:diasemana)) %&gt;%
+  pivot_longer(-estacion, names_to = &quot;key&quot;, values_to = &quot;value&quot;) %&gt;%
+  ggplot(aes(value)) +
+  facet_wrap(~ key, scales = &quot;free&quot;) +
+  geom_density(aes(fill = estacion), alpha = 0.2) +
+  theme_bw() +
+  theme(text = element_text(size=6)) + 
+  xlab(&quot;Valores&quot;) +
+  scale_y_continuous(name = &quot;Densidad&quot;)</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
+</div>
+<p>Efectivamente, la distribución de datos es idéntica para las tres estaciones, si exceptuamos los valores de velocidad del viento.</p>
+<p>Finalmente voy a ver si hay valores anormales que aparezcan como valores extremos en los boxplot:</p>
+<div class="layout-chunk" data-layout="l-screen">
+<pre class="r"><code>
+df %&gt;%
+  select (-TIMESTAMP,-RECORD, -c(latitud:diasemana)) %&gt;%
+  pivot_longer(-estacion, names_to = &quot;key&quot;, values_to = &quot;value&quot;) %&gt;%
+  ggplot(aes(y = value)) +
+  facet_wrap(~ key, scales = &quot;free&quot;) +
+  geom_boxplot(aes(colour = estacion )) +
+  theme_bw() +
+  theme(text = element_text(size=6),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  xlab(&quot;Estaciones&quot;) +
+  scale_y_continuous(name = &quot;Valores&quot;, labels = comma)</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+</div>
+<p>Los boxplot muestran algunas cosas extrañas:</p>
+<ul>
+<li>Humedades relativas (Hum_Rel_Avg) negativas: deben ser errores de análisis o de cálculo</li>
+<li>Valores de temperatura del aire (Temp_Aire_Avg) por debajo de -40ºC (habíamos detectado antes un mínimo en -57ºC), que parecen excepcionales y podrían ser también valores erróneos.</li>
+<li>Valores de presion de vapor (VP_KPA_Avg) negativos</li>
+</ul>
+<p>Antes de continuar el análisis, tengo que decidir si considerar estos valores o eliminarlos.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(año,&quot;%Y&quot;)),Hum_Rel_Avg)) +
+  geom_boxplot(aes(colour = estacion )) +
+  ggtitle (&quot;Humedad relativa media&quot;, subtitle = &quot;Evolución anual para el periodo 2008-2019&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
+</div>
+<p>Hay varias cosas que me llaman la atención en este primer gráfico de la humedad relativa:</p>
+<ul>
+<li>En 2008 sólo hay datos de la estación <em>Canizal</em>, por lo que este año no puede utilizarse para comparar estaciones en base anual (sí mensual)</li>
+<li>Los datos de 2019 son muy escasos, ¿probablemente sólo de los primeros meses?</li>
+<li>Los datos de <em>Carrizal</em> de 2009 son anormales: el resto de los años el perfil de distribución es casi idéntico a las otras estaciones, no hay razón para que sea tan diferente en 2009. Es posible que los datos no se correspondan con año completo, y estén influídos por la estacionalidad del mes que se haya capturado.</li>
+<li>En la estación <em>Carrizal</em> aparecen en 2012 valores de humedad relativa negativos, esto es claramente un error.</li>
+<li>Parece haber una tendencia hacia valores más bajos de la mediana des 2010 al 2017, y un repunte a valores más altos en 2018 (no puedo decir nada de 2019 por la escasez de datos, aunque se podría comparar mes a mes). A revisar posteriormente en el análisis de series temporales.</li>
+</ul>
+<p>Sigo viendo los datos en detalle, agrupando ahora por meses</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(mes,&quot;%m&quot;)),Hum_Rel_Avg)) +
+  geom_boxplot(aes(colour = estacion ))  +
+  ggtitle (&quot;Humedad relativa media&quot;, subtitle = &quot;Evolución mensual para el periodo 2008-2019&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<p>En la gráfica mensual se aprecia una clara tendencia estacional para las tres estaciones, que por otra parte parece bastante lógica: en nuestras latitudes, la humedad relativa es más baja en los meses de verano. Más tarde podré analizar el componente estacional de la serie para las tres estaciones.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(mes,&quot;%m&quot;)),Hum_Rel_Avg)) +
+  geom_boxplot(aes(colour = estacion )) +
+  facet_grid(as.factor(format(año,&quot;%Y&quot;))~.)  +
+  ggtitle (&quot;Humedad relativa media&quot;, subtitle = &quot;Evolución mensual por años para el periodo 2008-2019&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+</div>
+<p>En el boxplot combinado confirmo que efectivamente los datos de <em>Canizal</em> de 2017 son únicamente de diciembre; <em>Carrizal</em> se ha incorporado a la serie en noviembre de 2008, y los datos de 2019 se corresponden con el mes de enero.</p>
+<p>En cualquier caso, el boxplot anterior por meses no muestra diferencias importantes entre estaciones para los meses de enero, noviembre o diciembre. Puedo mantener los valores mensuales para el análisis de la serie estacional y eliminarlos para la comparación anual. A revisar.</p>
+<p>Como la gráfica que más datos ha aportado es la de valores agrupados por mes, voy a utilizar el mismo modelo para los datos de temperatura media del aire.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(mes,&quot;%m&quot;)),Temp_Aire_Avg)) +
+  geom_boxplot(aes(colour = estacion ))  +
+  ggtitle (&quot;Temperatura media del aire&quot;, subtitle = &quot;Evolución mensual&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-14-1.png" width="624" /></p>
+</div>
+<p>La gráfica mensual de temperatura del aire confirma datos anormales en marzo y abril de 2012 para la estación <em>Carrizal</em>. Con la evolución de temperaturas medias anual y los valores de las medianas y dispersión para estos meses, los valores por debajo de -40ºC pueden considerarse anómalos en mi opinión.</p>
+<p>También en la temperatura del aire parece haber clara estacionalidad, con algunos valores extremos en algunos meses pero no demasiado lejos de los rangos habituales.</p>
+<p>Voy a revisar la última variable que parecía tener valores anómalos, el promedio de la presión de vapor (<em>VP_KPA_Avg</em>)</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(mes,&quot;%m&quot;)),VP_KPA_Avg)) +
+  geom_boxplot(aes(colour = estacion ))  +
+  ggtitle (&quot;Promedio de la presión de vapor&quot;, subtitle = &quot;Evolución mensual para el periodo 2008-2019&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-15-1.png" width="624" /></p>
+</div>
+<p>Efectivamente, el dato de presion de vapor negativa es anormal e imposible, luego es a eliminar. También aquí aparece ua componente estacional a analizar.</p>
+<p>Conclusiones del primer análisis exploratorio de los datos:</p>
+<ul>
+<li>Valores a eliminar:
+<ul>
+<li>Humedad relativa negativa</li>
+<li>Temperatura media del aire inferior a -40ºC</li>
+<li>Presión de vapor promedio inferior a cero</li>
+</ul></li>
+<li>En función del análisis, considerar que:
+<ul>
+<li>La serie <em>Canizal</em> empieza en diciembre 2008</li>
+<li>La serie <em>Carrizal</em> empieza en noviembre 2009</li>
+<li>La serie <em>Granja</em> empieza en enero 2009</li>
+</ul></li>
+</ul>
+<p>Por lo tanto, procedo a eliminar esos datos</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+df$Hum_Rel_Avg[df$Hum_Rel_Avg &lt; 0] &lt;- NA
+df$Temp_Aire_Avg[df$Temp_Aire_Avg &lt; -40] &lt;- NA
+df$VP_KPA_Avg[df$VP_KPA_Avg &lt; 0] &lt;- NA</code></pre>
+</div>
+<p>Verifico las eliminaciones con los tres boxplot</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(mes,&quot;%m&quot;)),Hum_Rel_Avg)) +
+  geom_boxplot(aes(colour = estacion ))  +
+  ggtitle (&quot;Humedad relativa media&quot;, subtitle = &quot;Evolución mensual para el periodo 2008-2019&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-17-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(mes,&quot;%m&quot;)),Temp_Aire_Avg)) +
+  geom_boxplot(aes(colour = estacion ))  +
+  ggtitle (&quot;Temperatura media del aire&quot;, subtitle = &quot;Evolución mensual para el periodo 2008-2019&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-18-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+ggplot(data = df, aes (as.factor(format(mes,&quot;%m&quot;)),VP_KPA_Avg)) +
+  geom_boxplot(aes(colour = estacion ))  +
+  ggtitle (&quot;Promedio de la presión de vapor&quot;, subtitle = &quot;Evolución mensual para el periodo 2008-2019&quot;) +
+  xlab(&quot;Año&quot;) +
+  theme_bw()</code></pre>
+<p><img src="dando-una-vuelta-al-concurso-r-parte-1_files/figure-html5/unnamed-chunk-19-1.png" width="624" /></p>
+</div>
+<p>Una vez los datos corregidos, quedan listos para el análisis, que haré en principio en dos partes:</p>
+<ul>
+<li>Relaciones entre las variables</li>
+<li>Evolución de los valores en el tiempo, tendencias, factores estacionales, …</li>
+</ul>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>

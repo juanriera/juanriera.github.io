@@ -1,0 +1,17 @@
+num;variable;descripcion;comentario
+1;TIMESTAMP;Fecha;marca de fecha y hora  en formato POSIXct
+2;RECORD;Número de registro;Número de registro
+3;Lluvia_Tot;Lluvia total;cantidad de lluvia acumulada en ese intervalo (10 minutos), expresada en milímetros (mm).
+4;Vel_Viento_Max;Velocidad máxima del viento;velocidad máxima del viento en un instante (también llamada racha máxima), en ese intervalo de tiempo. Se expresa en metros/segundo (m/s).
+5;VV_media;Velocidad media del viento;velocidad media en el intervalo dado (10 minutos). Se expresa en metros/segundos (m/s).
+6;DV_media;Dirección media del viento;en el intervalo de diez minutos, el valor medio de la dirección del viento, expresado en grados (sentido de las agujas del reloj, desde el norte).
+7;Desv_Stand_DV;Desviación estándar de la dirección del viento;desviación estándar de la variable anterior, expresada en grados (sentido de las agujas del reloj, desde el norte).
+8;Temp_Aire_Avg;Temperatura del aire;media de la temperatura en el periodo de tiempo medido (10 minutos), expresada en grados centígrados (?C).
+9;VP_KPA_Avg;Promedio de la presión de vapor;promedio de la humedad que hay en el aire en ese periodo de tiempo (10 minutos), pero expresada en términos de presión vapor. Esta es la cantidad de presión con la que contribuye el vapor de agua a la presión atmosférica. Se expresa en kilopascales (kPa).
+10;VPD_KPA_Avg;Promedio del déficit de la presión de vapor;promedio, en ese periodo de tiempo de 10 minutos, de la diferencia entre la presión de vapor saturante y la real, es decir, cuánto nos falta con la presión de vapor que tenemos para llegar a la saturación. En otras palabras, cuán seco está el aire. Así, cuando este valor es muy alto, se separa / aleja mucho de la saturación (hay poco vapor en el aire). Esto se traduce en que la atmósfera está demandando agua, lo cual hace que la fotosíntesis de las plantas se resienta. Estas cierran los estomas para protegerse y no perder agua, y eso va en su contra. Se expresa en kilopascales (kPa).
+11;Hum_Rel_Avg;Promedio de la humedad relativa;esta es otra forma de expresar la humedad, de manera relativa. Es el promedio, en ese periodo de tiempo de 10 minutos, del porcentaje de humedad que tiene el aire, respecto a la saturación. Es una, producto de dividir la humedad que tiene el aire entre la humedad de saturación a esa misma temperatura, y multiplicándolo por cien. Se expresa en porcentaje (%).
+12;Radiacion_Avg;Promedio de radiación solar;promedio, en ese periodo de tiempo de 10 minutos, de la cantidad de energía que se recibe del Sol o, en otras palabras, de la energía incidente que llega a la superficie de la Tierra. Se expresa en vatios por metro cuadrado (W/m2).
+13;Rad_acum_Tot;Radiación acumulada total;acumulado de la radiación solar en el intervalo de 10 minutos. Se expresa en megajulios por metro cuadrado (MJ/m2).
+14;estacion;Denominación de la estación;Denominación de la estación
+15;latitud;Latitud;Coordenadas de latitud de la estación
+16;longitud;Longitud;Coordenadas de longitud de la estación
