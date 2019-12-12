@@ -14,6 +14,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
 ```
 
 El pasado mes de noviembre, mientras preparaba algunas notas de la presentación a las Jornadas R con una persona de mi equipo, encontré la página del grupo R de Asturias, y en ella la reseña de un concurso de análisis de datos mediante R en su segunda convocatoria. La fecha límite de presentación era octubre, por lo que estaba ya fuera de plazo, y tampoco los concursos me interesan demasiado; no obstante, me propuse echar una mirada a los datos cuando tuviese tiempo, para poder después intercambiar comentarios con el equipo R de Asturias, con el que me había propuesto conectar.
@@ -29,11 +30,13 @@ library(scales) # para ggplot
 load ("Carrizal.RData")
 load ("Canizal.RData")
 load ("Granja.RData")
+
 ```
 
 
 ```{r, include = TRUE, echo = TRUE,layout="l-body-outset"}
 paged_table(head(granja, n=20))
+
 ```
 
 El origen y tipo de datos está explicado en la página del concurso, en https://rusersasturias.github.io/contest/, así como las bases del mismo.
@@ -43,7 +46,9 @@ Para facilitarme la lectura de los contenidos de las variables, me creé tambié
 ```{r , include=TRUE, echo = TRUE}
 etiquetas <- read.csv2("descripcion variables.csv")
 paged_table(etiquetas)
+
 ```
+
 
 Desgraciadamente, hay algún problema que aparece después en las llamadas a funciones *tidyverse*, o bien yo no he sabido utilizarlo, por lo que he descartado usar esta opción. 
 
@@ -59,6 +64,7 @@ variables <- as.vector(etiquetas$variable)
 label(df) <- as.list(nombres[match(names(df), variables)])
 
 paged_table(head(df,, n=50))
+
 ```
 
 La tabla muesta la línea ne la que aparecen las etiquetas de descripción que pueden visualizarse en RStudio mediante la instrucción *view(df)*
@@ -72,6 +78,7 @@ df <- full_join(canizal,carrizal)
 df <- full_join(df,granja)
 
 paged_table(as.data.frame(str(df)))
+
 ```
 
 
@@ -85,6 +92,7 @@ resumen <- as.data.frame(t(resumen))
 
 ## tabla para Rmarkdown
 paged_table(resumen)
+
 ```
 
 
@@ -101,6 +109,7 @@ df$mes <- as.Date(cut(df$fecha, "month"))
 df$año <- as.Date(cut(df$fecha, "year"))
 df$diasemana <- format(df$fecha,"%A")
 df$diasemana <- factor(df$diasemana, levels=c("lunes","martes","miércoles","jueves","viernes","sábado","domingo"),ordered=TRUE)
+
 ```
 
 
@@ -119,6 +128,7 @@ df %>%
   theme(text = element_text(size=6)) +
   xlab ("Valores") +
   scale_y_continuous(name = "Núm de casos", labels = comma)
+
 ```
 
 Aparentemente la distribución de valores en las tres estaciónes es casi idéntica, con excepción de la velocidad del viento, que es más variable sobre todo en la estación *granja*. También es la estación que tiene menos valores.
@@ -135,6 +145,7 @@ df %>%
   theme(text = element_text(size=6)) + 
   xlab("Valores") +
   scale_y_continuous(name = "Densidad")
+
 ```
 
 Efectivamente, la distribución de datos es idéntica para las tres estaciones, si exceptuamos los valores de velocidad del viento.
@@ -154,6 +165,7 @@ df %>%
         axis.ticks.x=element_blank()) +
   xlab("Estaciones") +
   scale_y_continuous(name = "Valores", labels = comma)
+
 ```
 
 Los boxplot muestran algunas cosas extrañas:
@@ -170,6 +182,7 @@ ggplot(data = df, aes (as.factor(format(año,"%Y")),Hum_Rel_Avg)) +
   ggtitle ("Humedad relativa media", subtitle = "Evolución anual para el periodo 2008-2019") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 Hay varias cosas que me llaman la atención en este primer gráfico de la humedad relativa:
@@ -188,6 +201,7 @@ ggplot(data = df, aes (as.factor(format(mes,"%m")),Hum_Rel_Avg)) +
   ggtitle ("Humedad relativa media", subtitle = "Evolución mensual para el periodo 2008-2019") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 En la gráfica mensual se aprecia una clara tendencia estacional para las tres estaciones, que por otra parte parece bastante lógica: en nuestras latitudes, la humedad relativa es más baja en los meses de verano. Más tarde podré analizar el componente estacional de la serie para las tres estaciones.
@@ -199,6 +213,7 @@ ggplot(data = df, aes (as.factor(format(mes,"%m")),Hum_Rel_Avg)) +
   ggtitle ("Humedad relativa media", subtitle = "Evolución mensual por años para el periodo 2008-2019") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 En el boxplot combinado confirmo que efectivamente los datos de *Canizal* de 2017 son únicamente de diciembre; *Carrizal* se ha incorporado a la serie en noviembre de 2008, y los datos de 2019 se corresponden con el mes de enero. 
@@ -213,6 +228,7 @@ ggplot(data = df, aes (as.factor(format(mes,"%m")),Temp_Aire_Avg)) +
   ggtitle ("Temperatura media del aire", subtitle = "Evolución mensual") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 La gráfica mensual de temperatura del aire confirma datos anormales en marzo y abril de 2012 para la estación *Carrizal*. Con la evolución de temperaturas medias anual y los valores de las medianas y dispersión para estos meses, los valores por debajo de -40ºC pueden considerarse anómalos en mi opinión.
@@ -227,6 +243,7 @@ ggplot(data = df, aes (as.factor(format(mes,"%m")),VP_KPA_Avg)) +
   ggtitle ("Promedio de la presión de vapor", subtitle = "Evolución mensual para el periodo 2008-2019") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 Efectivamente, el dato de presion de vapor negativa es anormal e imposible, luego es a eliminar. También aquí aparece ua componente estacional a analizar.
@@ -249,6 +266,7 @@ Por lo tanto, procedo a eliminar esos datos
 df$Hum_Rel_Avg[df$Hum_Rel_Avg < 0] <- NA
 df$Temp_Aire_Avg[df$Temp_Aire_Avg < -40] <- NA
 df$VP_KPA_Avg[df$VP_KPA_Avg < 0] <- NA
+
 ```
 
 Verifico las eliminaciones con los tres boxplot
@@ -259,6 +277,7 @@ ggplot(data = df, aes (as.factor(format(mes,"%m")),Hum_Rel_Avg)) +
   ggtitle ("Humedad relativa media", subtitle = "Evolución mensual para el periodo 2008-2019") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 
@@ -268,6 +287,7 @@ ggplot(data = df, aes (as.factor(format(mes,"%m")),Temp_Aire_Avg)) +
   ggtitle ("Temperatura media del aire", subtitle = "Evolución mensual para el periodo 2008-2019") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 
@@ -277,6 +297,7 @@ ggplot(data = df, aes (as.factor(format(mes,"%m")),VP_KPA_Avg)) +
   ggtitle ("Promedio de la presión de vapor", subtitle = "Evolución mensual para el periodo 2008-2019") +
   xlab("Año") +
   theme_bw()
+
 ```
 
 Una vez los datos corregidos, quedan listos para el análisis, que haré en principio en dos partes:
