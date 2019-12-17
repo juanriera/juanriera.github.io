@@ -1,0 +1,142 @@
+---
+title: "consumo_horario"
+author: "Juan Riera"
+date: "17/12/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Ayer he podido verificar que EDP facilita las lecturas horarias de mis consumos, como quería. Una vez registrado en su web, puedo descargarme las lecturas en formato **CSV** y leerlas en R. 
+
+Empiezo, como siempre, cargando al principio las librerías que voy a utilizar.
+
+```{r warning=FALSE, message=FALSE}
+library(knitr)
+library(rmarkdown)
+library(kableExtra)
+library(tidyverse)
+library(lubridate)
+library(scales) # para ggplot
+library(qicharts2)
+```
+
+A continuación, leo los datos en un dataframe. Los datos que proporciona EDP tienen en la primera columna el Código Universal de Punto de Suministro (CUPS). Lo elimino por confidencialidad.
+
+```{r warning=FALSE}
+df <- read.csv2("BD_Consumo_horario_CUPS.csv", as.is = TRUE)
+df <- df %>%
+        select (-CUPS)
+kable(head(df)) %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+El **CSV** tiene cuatro columnas: la fecha, la hora, el valor de consumo en kWh y el método de obtención de la lectura (que por el momento no voy a utilizar)
+
+Como he utilizado la opción `as.sis = TRUE` para evitar cargar columnas como factores, la fecha se ha cargado como texto. Cambio el formato a `POSIXct`, y añado la hora dentro del campo de fecha. Esto facilitará la preparación de las gráficas temporales.
+
+Los primeros valores de consumo de la tabla están en blanco: esto se debe a que EDP empezó aproporcionar datos a partir de septiembre de 2017. Voy a utilizar la función `tail()` en vez de `head`para mostrar los valores finales de la tabla, ya que en este mes sí que hay lecturas.
+
+```{r warning=FALSE}
+df$Fecha <- as.POSIXct(df$Fecha, format="%d/%m/%Y")
+df$Fecha <- df$Fecha + hours(df$Hora) # uso la función hours() de la librería lubridate()
+
+df <- df %>%
+        select (-Hora, -Metodo_obtencion)
+kable(tail(df)) %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+En total, tengo 19.609 lecturas horarias del período 2017 a 2019, aunque ya sé que no todos los valores están completos, hay algunos meses en los que no ha habido lecturas.
+
+Para echar una primera mirada a los datos, voy a utilizar `plotly`, que me permite ver los valores individualmente colocando el cursor sobre ellos.
+
+```{r warning=FALSE, message=FALSE}
+library(plotly)
+plot_ly(df, x = ~Fecha, y = ~Consumo_kWh)
+```
+
+La nube de puntos permite ver varias cosas:
+
+* Hemos vivido en casa regularmente hasta febrero de 2018. En esa fecha Elisa aprobó su exámen de MIR y vino a Madrid a vivir con nosotros. A partir de esa fecha, los consumos se corresponden con fines de semana o con vacaciones.
+* Los valores de consumo son muy irregulares, hay días con consumos muy altos y días con consumos muy bajos. Tendré que buscar explicación a esto.
+
+Hemos vuelto a Asturias en noviembre. Lo primero que quiero ver es si el consumo de estas últimas semanas se corresponde con los de 2018 y 2017. Ya sé que en noviembre de 2018 no vivíamos en casa, pero en 2017 sí.
+
+```{r warning=FALSE, message=FALSE, fig.width=15}
+df %>%
+  ggplot(aes(y=df$Consumo_kWh)) +
+  geom_boxplot( aes(x = as.factor(format(Fecha, "%m")))) +
+    facet_wrap((~as.factor(format(Fecha, "%Y")))) +
+    theme_bw() +
+    xlab("Mes") +
+    ylab("Consumo kWh") +
+    ggtitle ("Consumo eléctrico mensual 2017-2019", subtitle = "Lecturas horarias para el período") 
+
+```
+
+Los boxplot de consumos por meses muestran que después de muchos meses prácticamente sin consumo (salvo mi hipótesis de que hay consumos en vacaciones y fines de semana), en noviembre ha vuelto a subir el consumo de forma significativa. Además, parece que los valores son más altos que en 2018. 
+
+Mi casa tiene calefacción central, pero tiene un inconveniente, y es que mira al norte. Por esta razón, tiende a ser fría. Además, mis vecinos suelen ser ahorradores y los administradores de la comunidad de vecinos sólo encienden la calefacción por la tarde. Como la casa se enfría de noche, a media mañana, después de ventilar, tenemos que encender las estufas eléctricas, hasta que la casa vuelve a calentarse con la calefacción central Es cierto que este mes ha hecho mucho frío y ha llovido mucho, es posible que hayamos encendido la calefacción eléctrica más que los años anteriores, parece que los boxplot de noviembre y diciembre de 2019 muestran valores más altos que los de 2017 tanto para la mediana como para la caja 25%-75%. Estamos consumiendo más. 
+
+Pero me gustaría saber a qué horas consumimos, y verificar que la afirmación de mayor consumo en la mañana es correcta.
+
+Como he incorporado la hora dentro de la columna de fecha, puedo representar los consumos horarios y comparar la situación de los tres años.
+
+```{r warning=FALSE, fig.width=15}
+df %>%
+  ggplot(aes(y=Consumo_kWh)) +
+    geom_boxplot( aes(x = as.factor(format(Fecha, "%H")))) +
+    facet_wrap((~as.factor(format(Fecha, "%Y")))) +
+    theme_bw() +
+    xlab("Hora")
+```
+
+Los boxplot resultan un poco confusos porque en estos tres años ha habido situaciones muy distintas que distorsiona la comparación horaria entre años: meses sin consumo, fines de semana y vacaciones con consumo, veranos, etc. Sería más útil poder ver los consumos horarios por meses y años.
+
+```{r warning=FALSE,fig.width=15, fig.height= 10}
+df %>%
+  ggplot(aes(y=Consumo_kWh)) +
+    geom_boxplot( aes(x = as.factor(format(Fecha, "%H")))) +
+    facet_grid(rows = vars(as.factor(format(Fecha, "%m"))), cols = vars(as.factor(format(Fecha, "%Y")))) +
+    theme_bw() +
+    xlab ("Hora")
+```
+
+Bien aunque la gráfica es bastante informativa, hay tantos valores que no resulta nada clara.
+Aparentemente, en los años que hemos estado en casa, los consumos horarios parecen aumentar a mediodía (entre las 12 y las 16 horas). Es el caso de diciembre 2017, enero y febrero 2018 y noviembre y diciembre 2019.
+Para ver un poco más claro, voy a comparar sólo los meses de noviembre y diciembre de los tres años.
+
+```{r warning=FALSE,fig.width=15, fig.height= 10}
+df %>%
+  filter (month(Fecha) >10) %>%
+  ggplot(aes(y=Consumo_kWh)) +
+    geom_boxplot( aes(x = as.factor(format(Fecha, "%H")))) +
+    facet_grid(rows = vars(as.factor(format(Fecha, "%m"))), cols = vars(as.factor(format(Fecha, "%Y")))) +
+    theme_bw() +
+    xlab ("Hora")
+```
+
+Bueno, pues parece bastante claro que en noviembre y diciembre de 2019 hemos subido la mediana de consumo respecto a 2017, y sobre todo en diciembre, en donde el consumo a las primeras horas de la tarde ha sido regularmente más elevado. Esto puede tener que ver también con el hecho de que me he lesionado una rodilla y por las tardes me quedo en casa hasta que voy al fisioterapeuta a las 5 y  media, y no quiero pasar frío... lo pagaré en la factura.
+
+Finalmente, tengo interés en ver si desde noviembre hemos subido el consumo, esto es si en estos dos meses se puede detectar una tendencia al alza.
+
+```{r warning=FALSE, fig.width=15}
+df1 <- df %>%
+  filter (Fecha >= "2019-11-1")
+
+qic(Fecha, Consumo_kWh, 
+    data = df1,
+    chart = "i",
+    agg.fun = "median")
+```
+
+Una cosa que debo investigar mejor es la razón de que haya picos de consumos, valores aislados de consumo muy alto y que no parece que tengan relación con el consumo de base de las estufas eléctricas. ¿Pueden tener que ver con el uso no regular de otros elementos de consumo, como la placa vitrocerámica, la plancha o el horno? ¿Cuál es el imapcto de estos elementos en el consumo frente a las horas de uso de las estufas eléctricas?
+
+Tendré que pensar en un sistema de recolección de datos de uso horario de nuestros electrodomésticos, y esto creo que va a ser complicado de poner en marcha en la unidad familiar. Lo ideal sería que los propios electrodomésticos proporcionasen sus consumos reales, pero mi casa todavía no está preparada para la Industria 4.0 (todavía...)
+
+

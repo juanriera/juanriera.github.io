@@ -1,5 +1,20 @@
 [
   {
+    "path": "posts/2019-12-17-incorporando-las-lecturas-horarias-de-edp/",
+    "title": "Incorporando las lecturas horarias de EDP",
+    "description": "Primer análisis de los consumos eléctricos horarios de casa.",
+    "author": [
+      {
+        "name": "Juan Riera",
+        "url": "https://www.linkedin.com/in/juanriera/"
+      }
+    ],
+    "date": "2019-12-17",
+    "categories": [],
+    "preview": "posts/2019-12-17-incorporando-las-lecturas-horarias-de-edp/incorporando-las-lecturas-horarias-de-edp_files/figure-html5/unnamed-chunk-5-1.png",
+    "last_modified": "2019-12-17T17:09:13+01:00"
+  },
+  {
     "path": "posts/2019-12-12-dando-una-vuelta-al-concurso-r-parte-1/",
     "title": "Dando una vuelta al concurso R (parte 1)",
     "description": "Una mirada a los datos del concurso R de 2019",
